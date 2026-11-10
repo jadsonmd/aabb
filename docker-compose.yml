@@ -1,5 +1,7 @@
 # Sistema AABB - organizador de pelada
-# Uso: copie .env.example para .env, preencha os valores e rode `docker compose -p aabb up -d --build`.
+# Copie .env.example para .env e preencha os valores. Depois:
+#   - com as imagens publicadas no Docker Hub (ex: Raspberry Pi): docker compose -p aabb pull && docker compose -p aabb up -d
+#   - compilando a partir do código:                               docker compose -p aabb up -d --build
 
 services:
   aabb-mongodb:
@@ -25,7 +27,7 @@ services:
   # Postgres compartilhado: banco "evolution" (Evolution API) e banco "keycloak".
   aabb-postgres:
     build: ./infra/postgres
-    image: aabb-postgres:latest
+    image: ${AABB_IMAGENS:-jadsonmd}/aabb-postgres:${AABB_VERSAO:-latest}
     container_name: aabb-postgres
     restart: unless-stopped
     environment:
@@ -111,7 +113,7 @@ services:
 
   aabb-backend:
     build: ./aabb-backend
-    image: aabb-backend:latest
+    image: ${AABB_IMAGENS:-jadsonmd}/aabb-backend:${AABB_VERSAO:-latest}
     container_name: aabb-backend
     restart: unless-stopped
     depends_on:
@@ -135,7 +137,7 @@ services:
 
   aabb-keycloak:
     build: ./infra/keycloak
-    image: aabb-keycloak:latest
+    image: ${AABB_IMAGENS:-jadsonmd}/aabb-keycloak:${AABB_VERSAO:-latest}
     container_name: aabb-keycloak
     restart: unless-stopped
     depends_on:
@@ -163,7 +165,7 @@ services:
 
   aabb-frontend:
     build: ./aabb-frontend
-    image: aabb-frontend:latest
+    image: ${AABB_IMAGENS:-jadsonmd}/aabb-frontend:${AABB_VERSAO:-latest}
     container_name: aabb-frontend
     restart: unless-stopped
     depends_on:

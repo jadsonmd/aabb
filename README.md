@@ -14,11 +14,41 @@ As regras estão em `1_arquitetura_e_infraestrutura.md` a `4_integracao_whatsapp
 
 1. Copie `.env.example` para `.env` e preencha as chaves e senhas.
    Deixe `AABB_GRUPO_JID` vazio por enquanto.
-2. Suba tudo:
+2. Suba tudo, de uma das duas formas:
 
    ```sh
+   # Com as imagens publicadas no Docker Hub (ex: Raspberry Pi, sem compilar nada)
+   docker compose -p aabb pull && docker compose -p aabb up -d
+
+   # Compilando a partir do código
    docker compose -p aabb up -d --build
    ```
+
+### Servidor só com as imagens (Raspberry Pi)
+
+O servidor precisa apenas do `docker-compose.yml` e do `.env` (o realm do Keycloak e o script do Postgres já
+estão dentro das imagens):
+
+```sh
+mkdir aabb && cd aabb
+curl -fsSLO https://raw.githubusercontent.com/jadsonmd/aabb/main/docker-compose.yml
+curl -fsSL https://raw.githubusercontent.com/jadsonmd/aabb/main/.env.example -o .env
+nano .env   # preencha as senhas e a AABB_URL_PUBLICA (antes da primeira subida)
+docker compose -p aabb pull && docker compose -p aabb up -d
+```
+
+Para atualizar depois de uma nova publicação: `docker compose -p aabb pull && docker compose -p aabb up -d`.
+Para fixar uma versão, use `AABB_VERSAO=<commit>` no `.env`.
+
+### Publicar as imagens (na máquina de desenvolvimento)
+
+```sh
+docker login
+scripts/publicar-imagens.sh            # publica jadsonmd/aabb-* para amd64 e arm64
+```
+
+O script exige o código commitado e publica as tags `latest` e a do commit atual. As imagens não contêm
+segredos: senhas e chaves vêm do `.env` do servidor.
 
 3. Painel: abra `AABB_URL_PUBLICA` (padrão `http://localhost:8088`) e entre com o usuário `admin` e a senha
    `AABB_PAINEL_SENHA_INICIAL`. O Keycloak pede uma senha nova no primeiro login.
