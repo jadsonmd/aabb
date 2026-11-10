@@ -1,0 +1,48 @@
+{
+  "realm": "aabb",
+  "displayName": "AABB · Painel da Pelada",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "resetPasswordAllowed": false,
+  "rememberMe": true,
+  "loginWithEmailAllowed": false,
+  "internationalizationEnabled": true,
+  "supportedLocales": ["pt-BR"],
+  "defaultLocale": "pt-BR",
+  "clients": [
+    {
+      "clientId": "aabb-painel",
+      "name": "Painel AABB",
+      "enabled": true,
+      "publicClient": true,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "rootUrl": "${AABB_URL_PUBLICA}",
+      "baseUrl": "/",
+      "redirectUris": ["${AABB_URL_PUBLICA}/*"],
+      "webOrigins": ["${AABB_URL_PUBLICA}"],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "${AABB_URL_PUBLICA}/*"
+      }
+    }
+  ],
+  "users": [
+    {
+      "username": "admin",
+      "firstName": "Admin",
+      "lastName": "AABB",
+      "email": "admin@aabb.local",
+      "emailVerified": true,
+      "enabled": true,
+      "requiredActions": ["UPDATE_PASSWORD"],
+      "credentials": [
+        { "type": "password", "value": "${AABB_PAINEL_SENHA_INICIAL}", "temporary": true }
+      ]
+    }
+  ]
+}

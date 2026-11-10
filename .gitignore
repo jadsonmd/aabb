@@ -1,0 +1,9 @@
+.DS_Store
+
+# Segredos e arquivos temporários de editores (o .env.swp do vim contém o .env inteiro)
+.env
+.env.*
+!.env.example
+*.swp
+*.swo
+*~

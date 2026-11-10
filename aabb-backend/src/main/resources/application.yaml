@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: aabb-backend
+  threads:
+    virtual:
+      enabled: true
+  mongodb:
+    uri: ${AABB_MONGODB_URI:mongodb://localhost:27017/aabb?replicaSet=rs0}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # Chaves buscadas na rede interna; o "iss" do token é a URL pública vista pelo navegador.
+          jwk-set-uri: ${AABB_KEYCLOAK_JWKS_URI:http://localhost:8180/auth/realms/aabb/protocol/openid-connect/certs}
+          issuer-uri: ${AABB_KEYCLOAK_ISSUER:http://localhost:8088/auth/realms/aabb}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+aabb:
+  grupo-jid: ${AABB_GRUPO_JID:}
+  evolution:
+    url: ${AABB_EVOLUTION_URL:http://localhost:8081}
+    api-key: ${AABB_EVOLUTION_API_KEY:}
+    instancia: ${AABB_EVOLUTION_INSTANCIA:aabb-bot}
+    delay-ms: 2000
+  agenda:
+    dias: [MONDAY, THURSDAY]
+    horario: "19:00"
+    zona: America/Sao_Paulo
+    # Abertura da lista às 6h dos dias de jogo (mesmos dias de aabb.agenda.dias)
+    abertura-cron: "0 0 6 * * MON,THU"
+  cadastro:
+    # Pré-cadastro automático: o nivelamento acontece naturalmente com os jogos.
+    skill-inicial: 5.0
+    posicao-inicial: L
+  sorteio:
+    minimo-jogadores: 10
+    titulares: 14
+    tolerancia-skill: 0.5
+  skill:
+    minimo: 0.0
+    maximo: 10.0
+    votos-necessarios: 3
+    jogada-efeito: 0.2
+    gol: 0.3
+    # Quantidade máxima por mensagem em #marcou, #canetou e #chapelou (ex: 10x)
+    maximo-por-lance: 10
+    vitoria: 0.3
+    empate: 0.1
